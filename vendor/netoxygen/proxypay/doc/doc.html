@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body>
+<h1 id="proxypay-payment-platform">Proxypay Payment Platform</h1>
+<p><em>V. 1.8.0 - 2020-07-17</em></p>
+<h2 id="integration-documentation">Integration documentation</h2>
+<h3 id="overview">Overview</h3>
+<p>The Proxypay Payment Platform (PPP) by Net Oxygen allows you to receive payments through other Payment Providers (Postfinance, Credit Cards, Twint) without having an account with them.</p>
+<h3 id="global-workflow">Global Workflow</h3>
+<ul>
+<li>1 - Get the user data on your website</li>
+<li>2 - Generate the form to send to the PPP</li>
+<li>3 - The PPP redirects the user to Postfinance</li>
+<li>4 - The user makes the payment</li>
+<li>5 - Postfinance redirects the user to the PPP</li>
+<li>6 - The PPP redirects the user to your website</li>
+</ul>
+<h3 id="ppp-form">PPP Form</h3>
+<p><strong>URL</strong> The form must be submitted with the <strong>POST</strong> method to <strong>https://payment.proxypay.ch/payment/form</strong><br/></p>
+<p><strong>Mandatory fields</strong></p>
+<table>
+<colgroup>
+<col width="9%" />
+<col width="52%" />
+<col width="37%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>amount</strong></td>
+<td>The TTC amount of the transaction as a decimal.</td>
+<td><em>12.50</em></td>
+</tr>
+<tr class="even">
+<td><strong>description</strong></td>
+<td>The transaction description, as a 100* max characters string.</td>
+<td><em>Don spontané</em></td>
+</tr>
+<tr class="odd">
+<td><strong>seller</strong></td>
+<td>The unique seller id you received from Net Oxygen.</td>
+<td><em>my_seller_name</em></td>
+</tr>
+<tr class="even">
+<td><strong>success_url</strong></td>
+<td>The absolute URL where to redirect the user on sucess, as a 200* max characters string.</td>
+<td><em>https://www.your_website.tld/success?id=155</em></td>
+</tr>
+<tr class="odd">
+<td><strong>error_url</strong></td>
+<td>The absolute URL where to redirect the user on error, as a 200* max characters string.</td>
+<td><em>https://www.your_website.tld/error?id=155</em></td>
+</tr>
+<tr class="even">
+<td><strong>cancel_url</strong></td>
+<td>The absolute URL where to redirect the user on cancellation, as a 200* max characters string.</td>
+<td><em>https://www.your_website.tld/cancel?id=155</em></td>
+</tr>
+<tr class="odd">
+<td><strong>sha_sign</strong></td>
+<td>The SHA256 signature of the query params (see Requests and Responses signature)</td>
+<td><em>5440b26de45174f4a51a35a4acb209ad2fc83fac71a801bfc0afa53b6ad2a002</em></td>
+</tr>
+</tbody>
+</table>
+<p>*: <em>Longer values will be truncated</em></p>
+<p><strong>Optional fields</strong></p>
+<p>The optional fields are about the buyer and the language to use for Postfinance</p>
+<table style="width:100%;">
+<colgroup>
+<col width="12%" />
+<col width="73%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>fullname</strong></td>
+<td>Buyer fullname, as a 35* max characters string.</td>
+<td><em>Belkacem Alidra</em></td>
+</tr>
+<tr class="even">
+<td><strong>email</strong></td>
+<td>Buyer email address, as a 50* max characters string.</td>
+<td><em>support@netoxygen.ch</em></td>
+</tr>
+<tr class="odd">
+<td><strong>address</strong></td>
+<td>Buyer address, as a 35* max characters string.</td>
+<td><em>Avenue d'aïre 56</em></td>
+</tr>
+<tr class="even">
+<td><strong>zip</strong></td>
+<td>Buyer postal code, as an 10* max characters string.</td>
+<td><em>1203</em></td>
+</tr>
+<tr class="odd">
+<td><strong>city</strong></td>
+<td>Buyer city, as a 25* max characters string.</td>
+<td><em>Genève</em></td>
+</tr>
+<tr class="even">
+<td><strong>country</strong></td>
+<td>Buyer country code, as an <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a> 2 characters string.</td>
+<td><em>CH</em></td>
+</tr>
+<tr class="odd">
+<td><strong>lang</strong></td>
+<td>Postfinance interface language. Possible values: fr_FR (default), ar_AR, cs_CZ, dk_DK, de_DE, el_GR, es_ES, fi_FI, fr_FR, he_IL, hu_, it_IT, ja_JP, ko_KR, nl_BE, nl_NL, no_NO, pl_PL, pt_PT, ru_RU, se_SE, sk_SK, tr_TR, zh_CN</td>
+<td><em>en_US</em></td>
+</tr>
+<tr class="even">
+<td><strong>callback_url</strong></td>
+<td>The absolute URL where to redirect if the user leave the page before to be redirected to the success_url</td>
+<td><em>https://www.your_website.tld/callback?id=155</em></td>
+</tr>
+<tr class="odd">
+<td><strong>callback_method</strong></td>
+<td>The method which callback_url must be called. Possible values: POST, GET</td>
+<td><em>POST</em></td>
+</tr>
+</tbody>
+</table>
+<p>*: <em>Longer values will be truncated</em></p>
+<p><strong>Test Mode</strong></p>
+<p>By default, the test mode is disabled: all transactions are for real.</p>
+<p>You can enable it by sending in your form a field named <strong>test</strong> with the value <strong>1</strong> Sending 0 or omitting the field has the same effect</p>
+<table>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>test</td>
+<td>Enable the test mode with the value 1, 0 to disable</td>
+</tr>
+</tbody>
+</table>
+<h3 id="postfinance-page-customization">Postfinance page customization</h3>
+<p>You can choose, on the Postfinance payment page, the background color and the top left logo.<br></p>
+<ul>
+<li>To change the background color (white by default), send us the html code: ex: #FF0000 for red.<br/></li>
+<li>To change the top left logo, send us your logo in png format.</li>
+</ul>
+<h3 id="email-notifications">Email notifications</h3>
+<p>You can provide us one email address which will receive a notification on each transaction, after the transaction has completed (notification for a succesfull/cancelled/error transaction).</p>
+<h3 id="request-and-responses-signature">Request and Responses signature</h3>
+<p>All the communication between your server and the PPP is signed using HMAC SHA256.</p>
+<p><strong>Keys</strong></p>
+<p>You have been provided two keys:</p>
+<ul>
+<li><strong>key_in</strong>: to sign your requests</li>
+<li><strong>key_out</strong>: to check our responses signature</li>
+</ul>
+<p><strong>Net Oxygen Payment PHP library</strong></p>
+<p>The library is <a href="http://www.php-fig.org/psr/psr-4">PSR-4 compliant</a> and the simplest way to install it is via composer:</p>
+<pre><code>composer require netoxygen/proxypay</code></pre>
+<p>Require the Composer autoloader if it's not already done.</p>
+<p>It can also be found on <a href="https://github.com/NetOxygen/proxypay">Github</a></p>
+<p><strong>Signing your requests</strong></p>
+<p>You have to add in your request a param named <strong>sha_sign</strong> (or SHA_SIGN).</p>
+<p>The easier way to sign your requests is to use the <code>PaymentRequest</code> class.</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">use</span> Netoxygen\ProxyPay\PaymentRequest<span class="ot">;</span>
+
+<span class="co">/**</span>
+<span class="co">  * We assume that $_POST contains all your request parameters:</span>
+<span class="co">  * - seller</span>
+<span class="co">  * - amount</span>
+<span class="co">  * - description</span>
+<span class="co">  * - success_url</span>
+<span class="co">  * - error_url</span>
+<span class="co">  * - cancel_url</span>
+<span class="co">  *</span>
+<span class="co">  * All the other parameters will be filtered.</span>
+<span class="co">  */</span>
+<span class="kw">$request</span> = <span class="kw">new</span> PaymentRequest<span class="ot">(</span><span class="kw">$_POST</span><span class="ot">,</span> <span class="st">&#39;my_key_in&#39;</span><span class="ot">);</span>
+
+<span class="co">// You can loop over all your parameters in the $request</span>
+<span class="kw">foreach</span> <span class="ot">(</span><span class="kw">$request</span>-&gt;get_parameters<span class="ot">()</span> <span class="kw">as</span> <span class="kw">$key</span> =&gt; <span class="kw">$value</span><span class="ot">)</span> {
+    <span class="fu">echo</span> <span class="kw">$key</span> . <span class="st">&#39;=&#39;</span> . <span class="kw">$value</span><span class="ot">;</span>
+}
+
+<span class="co">// You can retrieve the SHA_SIGN</span>
+<span class="kw">$sha_sign</span> = <span class="kw">$request</span>-&gt;compose_sha_sign<span class="ot">();</span></code></pre></div>
+<h3 id="check-proxypay-responses-signature">Check ProxyPay responses signature</h3>
+<p>At the end of the process, you receive a signed GET callback from ProxyPay.</p>
+<p>To ensure that the request is correctly signed, just use the <code>Paymentresponse</code> class.</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">use</span> Netoxygen\ProxyPay\PaymentResponse<span class="ot">;</span>
+
+<span class="kw">$response</span> = <span class="kw">new</span> PaymentResponse<span class="ot">(</span><span class="kw">$_GET</span><span class="ot">,</span> <span class="st">&#39;my_key_out&#39;</span><span class="ot">);</span>
+<span class="kw">if</span> <span class="ot">(</span><span class="kw">$response</span>-&gt;is_valid<span class="ot">())</span> {
+    <span class="co">// $response signature is verified, now check the transaction status</span>
+    <span class="kw">$params</span>         = <span class="kw">$response</span>-&gt;get_parameters<span class="ot">();</span>
+    <span class="kw">$payment_status</span> = <span class="kw">$params</span><span class="ot">[</span><span class="st">&#39;STATUS&#39;</span><span class="ot">];</span>
+    <span class="kw">switch</span><span class="ot">(</span><span class="kw">$payment_status</span><span class="ot">)</span> {
+        <span class="kw">case </span><span class="st">&#39;SUCCESS&#39;</span><span class="ot">:</span>
+            <span class="co">// Complete the transaction on your side</span>
+            <span class="kw">break</span><span class="ot">;</span>
+  
+        <span class="kw">case </span><span class="st">&#39;CANCEL&#39;</span><span class="ot">:</span>
+            <span class="co">// The transaction has been cancelled by the user</span>
+            <span class="kw">break</span><span class="ot">;</span>
+  
+        <span class="kw">case </span><span class="st">&#39;ERROR&#39;</span><span class="ot">:</span>   <span class="co">/* FALLTHROUGH */</span>
+        <span class="kw">default:</span>
+            <span class="co">// An error occured</span>
+            <span class="kw">break</span><span class="ot">;</span>
+} <span class="kw">else</span> {
+    <span class="co">// Bad request: throw away</span>
+}</code></pre></div>
+<h3 id="form-example">Form example</h3>
+<pre><code>&lt;form method=&quot;POST&quot; action=&quot;https://payment.proxypay.ch/payment/form&quot; class=&quot;form-horizontal&quot;&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;seller&quot; value=&quot;my_seller_name&quot; /&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;amount&quot; value=&quot;12.50&quot; /&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;description&quot; value=&quot;Don spontané&quot; /&gt;
+
+    &lt;!-- Enable test mode: remove the field to be in production mode --&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;test&quot; value=&quot;1&quot; /&gt;
+
+    &lt;input type=&quot;hidden&quot; name=&quot;success_url&quot;
+            value=&quot;https://www.your_website.tld/success/&quot; /&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;error_url&quot;
+            value=&quot;https://www.your_website.tld/error/&quot; /&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;cancel_url&quot;
+            value=&quot;https://www.your_website.tld/cancel/&quot; /&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;callback_url&quot;
+            value=&quot;https://www.your_website.tld/callback/&quot; /&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;callback_method&quot;
+            value=&quot;POST&quot; /&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;sha_sign&quot;
+            value=&quot;5440b26de45174f4a51a35a4acb209ad2fc83fac71a801bfc0afa53b6ad2a002&quot; /&gt;
+
+    &lt;div class=&quot;form-group&quot;&gt;
+        &lt;label for=&quot;fullname&quot; class=&quot;col-sm-2 control-label&quot;&gt;Nom complet&lt;/label&gt;
+        &lt;div class=&quot;col-sm-10&quot;&gt; &lt;input type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;fullname&quot; placeholder=&quot;Nom complet&quot; /&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-group&quot;&gt;
+        &lt;label for=&quot;email&quot; class=&quot;col-sm-2 control-label&quot;&gt;Email&lt;/label&gt;
+        &lt;div class=&quot;col-sm-10&quot;&gt; &lt;input type=&quot;email&quot; class=&quot;form-control&quot; name=&quot;email&quot; placeholder=&quot;Email&quot; /&gt; &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-group&quot;&gt;
+        &lt;label for=&quot;address&quot; class=&quot;col-sm-2 control-label&quot;&gt;Adresse&lt;/label&gt;
+        &lt;div class=&quot;col-sm-10&quot;&gt; &lt;input type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;address&quot; placeholder=&quot;Adresse&quot; /&gt; &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-group&quot;&gt;
+        &lt;label for=&quot;zip&quot; class=&quot;col-sm-2 control-label&quot;&gt;Code postal&lt;/label&gt;
+        &lt;div class=&quot;col-sm-10&quot;&gt; &lt;input type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;zip&quot; placeholder=&quot;Code postal&quot; /&gt; &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-group&quot;&gt;
+        &lt;label for=&quot;city&quot; class=&quot;col-sm-2 control-label&quot;&gt;Ville&lt;/label&gt;
+        &lt;div class=&quot;col-sm-10&quot;&gt; &lt;input type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;city&quot; placeholder=&quot;Cille&quot; /&gt; &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-group&quot;&gt;
+        &lt;label for=&quot;country&quot; class=&quot;col-sm-2 control-label&quot;&gt;Pays&lt;/label&gt;
+        &lt;div class=&quot;col-sm-10&quot;&gt; &lt;input type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;country&quot; placeholder=&quot;Pays&quot; /&gt; &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/form&gt;</code></pre>
+</body>
+</html>

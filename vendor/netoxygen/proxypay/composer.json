@@ -1,0 +1,29 @@
+{
+    "name": "netoxygen/proxypay",
+    "description": "ProxyPay library. Provides methods to compose SHA signatures and to check ProxyPay responses.",
+    "type": "library",
+    "homepage": "https://github.com/NetOxygen/proxypay.git",
+    "keywords": ["proxypay", "payment", "sha"],
+    "version": "1.8.1",
+    "autoload": {
+        "psr-4": {
+            "Netoxygen\\": "src/Netoxygen/"
+        }
+    },
+    "require": {
+        "php": ">=5.6.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8",
+        "goaop/framework": "1.1.1",
+        "codeception/aspect-mock": "1.0.0",
+        "satooshi/php-coveralls": "^1.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Belkacem Alidra",
+            "email": "belkacem.alidra@netoxygen.ch"
+        }
+    ]
+}
